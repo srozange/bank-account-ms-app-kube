@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-account-app
+  namespace: bank-account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-account-app
+  template:
+    metadata:
+      labels:
+        app: bank-account-app
+        version: "1.0"
+    spec:
+      containers:
+      - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0
+        name: bank-account-ms-app-kube-bank-account-service
+        imagePullPolicy: Always
+        env:
+          - name: CUSTOMER_SERVICE_URL
+            value: http://bank-customer-service:8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-account-app-experimental
+  namespace: bank-account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-account-app
+  template:
+    metadata:
+      labels:
+        app: bank-account-app
+        version: 1.0-experimental
+    spec:
+      containers:
+        - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0-experimental
+          name: bank-account-ms-app-kube-bank-account-service
+          imagePullPolicy: Always
+          env:
+            - name: CUSTOMER_SERVICE_URL
+              value: http://bank-customer-service:8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-account-service
+  namespace: bank-account
+spec:
+  ports:
+  - name: http
+    port: 8080
+    protocol: TCP
+    targetPort: 8083
+  selector:
+    app: bank-account-app
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bank-customer-app
+  namespace: bank-account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bank-customer-app
+  template:
+    metadata:
+      labels:
+        app: bank-customer-app
+        version: "1.0"
+    spec:
+      containers:
+      - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-customer-service:1.0
+        name: bank-account-ms-app-kube-bank-customer-service
+        imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bank-customer-service
+  namespace: bank-account
+spec:
+  ports:
+  - name: http 
+    port: 8080
+    protocol: TCP
+    targetPort: 8084
+  selector:
+    app: bank-customer-app
+  type: ClusterIP
