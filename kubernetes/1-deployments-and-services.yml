@@ -15,7 +15,7 @@ spec:
         version: "1.0"
     spec:
       containers:
-      - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0
+      - image: registry-istio.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0
         name: bank-account-ms-app-kube-bank-account-service
         imagePullPolicy: Always
         env:
@@ -39,7 +39,7 @@ spec:
         version: 1.0-experimental
     spec:
       containers:
-        - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0-experimental
+        - image: registry-istio.k3d.local:5001/bank-account-ms-app-kube-bank-account-service:1.0-experimental
           name: bank-account-ms-app-kube-bank-account-service
           imagePullPolicy: Always
           env:
@@ -78,7 +78,7 @@ spec:
         version: "1.0"
     spec:
       containers:
-      - image: registry.k3d.local:5001/bank-account-ms-app-kube-bank-customer-service:1.0
+      - image: registry-istio.k3d.local:5001/bank-account-ms-app-kube-bank-customer-service:1.0
         name: bank-account-ms-app-kube-bank-customer-service
         imagePullPolicy: Always
 ---
