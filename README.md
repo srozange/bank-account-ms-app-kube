@@ -26,7 +26,7 @@ kubectl apply -f kubernetes/2-istio-gateways.yml
 ```
 
 - Exposition des outils istio :
-Dans le code istio, faire un ```kubectl apply``` des yaml dans istio-1.20.3/samples/addons
+Dans le code istio, faire un ```kubectl apply``` des yaml tracing, kiali... dans istio-X.XX.X/samples/addons, puis :
 ```bash
 kubectl apply -f kubernetes/3-expose-istio-tools.yml
 ```
