@@ -49,12 +49,19 @@ Restart des deployments
 ```bash
 kubectl rollout restart deploy
 ```
-- Si ds WSL, mettre à jour le host :
+- Mettre à jour le host :
 ```
-ip-wsl kiali.istio
-ip-wsl grafana.istio
-ip-wsl prometheus.istio
-ip-wsl tracing.istio
-ip-wsl bank-account-service.istio
+127.0.0.1 kiali.istio
+127.0.0.1 grafana.istio
+127.0.0.1 prometheus.istio
+127.0.0.1 tracing.istio
+127.0.0.1 bank-account-service.istio
 ```
-- Url : http://bank-account-service.istio/api/accounts
+
+- Si sous WLS (pour acceder depuis windows) :
+Installer socal : https://sourceforge.net/projects/unix-utils/files/socat/1.7.3.2/socat-1.7.3.2-1-i686.zip/download    
+Lancer le script sur le host : ./redirect-wls.ps1      
+Les Urls :      
+  - http://bank-account-service.istio:8080/api/accounts
+  - http://kiali.istio:8080
+  - http://tracing.istio:8080
