@@ -7,7 +7,7 @@
 istioctl install --set profile=demo
 ```
 
-- Création des images docker :
+- Création des images docker (need to use java 17) :
 ```bash
 ./build-and-push-images.sh 1.0
 ./build-and-push-images.sh 1.0-experimental
@@ -19,17 +19,14 @@ kubectl create ns bank-account
 kubectl label ns bank-account istio-injection=enabled
 ```
 
-- Déploiment des micro service account et customer :
+- Déploiments  :
 ```bash
 kubectl apply -f kubernetes/1-deployments-and-services.yml
 kubectl apply -f kubernetes/2-istio-gateways.yml
+kubectl apply -f kubernetes/3-apply-istio-tools.yml
+kubectl apply -f kubernetes/4-expose-istio-tools.yml
 ```
-
-- Exposition des outils istio :
-Dans le code istio, faire un ```kubectl apply``` des yaml tracing, kiali... dans istio-X.XX.X/samples/addons, puis :
-```bash
-kubectl apply -f kubernetes/3-expose-istio-tools.yml
-```
+Note : Le fichier ```kubernetes/3-apply-istio-tools.yml``` provient de la distrib istio : istio-1.20.3/samples/addons
 
 - Maj du sampling rate
 ```bash
