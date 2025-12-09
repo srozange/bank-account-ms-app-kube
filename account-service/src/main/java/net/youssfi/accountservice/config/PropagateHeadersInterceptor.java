@@ -24,7 +24,7 @@ public class PropagateHeadersInterceptor implements RequestInterceptor {
         while (e.hasMoreElements())
         {
             String headerName = e.nextElement().toString();
-            if (headerName.toLowerCase().startsWith("x-"))
+            if (headerName.toLowerCase().startsWith("x-") || headerName.toLowerCase().startsWith("authorization"))
             {
                 String values = request.getHeader(headerName);
                 template.header(headerName, values);
