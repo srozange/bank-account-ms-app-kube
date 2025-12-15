@@ -1,8 +1,6 @@
 #!/bin/sh
 version=$1
 
-mvn clean package -DskipTests=true
-
 cd customer-service
 docker build . -t bank-account-ms-app-kube-bank-customer-service:$version
 
