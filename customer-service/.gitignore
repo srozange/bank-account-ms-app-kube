@@ -31,3 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Security Reports ###
+reports/
+*.json
+analyze_cve_severity.py
+create_cve_graph.py
+create_severity_graph.py
+extract_top_cve.py
+fix_dashboard.py
+create_top_cve_visualization.py
