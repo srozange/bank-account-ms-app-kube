@@ -4,9 +4,8 @@ import net.youssfi.customerservice.entities.Customer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.client.RestClient;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -38,19 +37,19 @@ public class CustomerServiceApplicationTests {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private RestClient restClient;
 
     @Test
     void testGetAllCustomers() {
-        var response = restTemplate.exchange(
-                "http://localhost:" + port + "/customers",
-                org.springframework.http.HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Customer>>() {}
-        );
+        restClient = RestClient.builder()
+                .baseUrl("http://localhost:" + port)
+                .build();
+        
+        List<Customer> customers = restClient.get()
+                .uri("/customers")
+                .retrieve()
+                .body(new org.springframework.core.ParameterizedTypeReference<List<Customer>>() {});
 
-        var customers = response.getBody();
         assertThat(customers).hasSize(2);
         assertThat(customers.get(0).getFirstName()).isEqualTo("Mohammadi");
         assertThat(customers.get(0).getLastName()).isEqualTo("Imane");
@@ -63,10 +62,14 @@ public class CustomerServiceApplicationTests {
 
     @Test
     void testGetFirstCustomer() {
-        var customer = restTemplate.getForObject(
-                "http://localhost:" + port + "/customers/1",
-                Customer.class
-        );
+        restClient = RestClient.builder()
+                .baseUrl("http://localhost:" + port)
+                .build();
+                
+        Customer customer = restClient.get()
+                .uri("/customers/1")
+                .retrieve()
+                .body(Customer.class);
 
         assertThat(customer).isNotNull();
         assertThat(customer.getFirstName()).isEqualTo("Mohammadi");
