@@ -1,14 +1,13 @@
 package net.youssfi.customerservice;
 
 import net.youssfi.customerservice.entities.Customer;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -38,24 +37,30 @@ public class CustomerServiceApplicationTests {
     @LocalServerPort
     private int port;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private WebTestClient webTestClient;
+
+    @BeforeEach
+    void setUp() {
+        webTestClient = WebTestClient.bindToServer()
+                .baseUrl("http://localhost:" + port)
+                .build();
+    }
 
     @Test
     void testGetAllCustomers() {
-        var response = restTemplate.exchange(
-                "http://localhost:" + port + "/customers",
-                org.springframework.http.HttpMethod.GET,
-                null,
-                new ParameterizedTypeReference<List<Customer>>() {}
-        );
+        var customers = webTestClient.get()
+                .uri("/customers")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Customer.class)
+                .returnResult()
+                .getResponseBody();
 
-        var customers = response.getBody();
         assertThat(customers).hasSize(2);
         assertThat(customers.get(0).getFirstName()).isEqualTo("Mohammadi");
         assertThat(customers.get(0).getLastName()).isEqualTo("Imane");
         assertThat(customers.get(0).getEmail()).isEqualTo("imane@gmail.com");
-        
+
         assertThat(customers.get(1).getFirstName()).isEqualTo("Ismaili");
         assertThat(customers.get(1).getLastName()).isEqualTo("Aymane");
         assertThat(customers.get(1).getEmail()).isEqualTo("aymane@gmail.com");
@@ -63,10 +68,13 @@ public class CustomerServiceApplicationTests {
 
     @Test
     void testGetFirstCustomer() {
-        var customer = restTemplate.getForObject(
-                "http://localhost:" + port + "/customers/1",
-                Customer.class
-        );
+        var customer = webTestClient.get()
+                .uri("/customers/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Customer.class)
+                .returnResult()
+                .getResponseBody();
 
         assertThat(customer).isNotNull();
         assertThat(customer.getFirstName()).isEqualTo("Mohammadi");
