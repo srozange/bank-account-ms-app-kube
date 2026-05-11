@@ -4,7 +4,7 @@
 
 - Installer un cluster k3d (nommé istio) : https://github.com/srozange/create-k3d-cluster/
 
-- Installer istio : https://istio.io/latest/docs/setup/getting-started/ 
+- Installer istio : https://istio.io/latest/docs/setup/getting-started/ (a date : https://github.com/istio/istio/releases/download/1.27.9/istio-1.27.9-linux-amd64.tar.gz)
 ```bash
 istioctl install --set profile=demo
 ```
@@ -95,5 +95,5 @@ curl --user "srozange:toto" http://bank-account-service.istio/api/accounts/6d210
 {"id":"6d210d2d-f96c-4a89-8eb4-1739ad841fde","balance":41134.012624550705,"createdAt":"2025-12-08","type":"SAVING_ACCOUNT","currency":"MAD","customerId":1,"customer":{"id":1,"firstName":"Source not available","lastName":"Source Not Available"}}                                                                                              
 ```
 
-Suite à une mise à jour de la rule opa : ```k rollout restart deployment```        
+Suite à une mise à jour de la rule opa : ```k rollout restart deployment -n bank-account```        
 Suite à une mise à jour de la conf itio/opa : ```kubectl rollout restart deployment/admission-controller -n opa-istio```

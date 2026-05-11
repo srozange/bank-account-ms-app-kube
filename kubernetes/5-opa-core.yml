@@ -18,6 +18,7 @@ apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
 metadata:
   name: ext-authz
+  namespace: bank-account
 spec:
   action: CUSTOM
   provider:
@@ -36,11 +37,12 @@ apiVersion: networking.istio.io/v1beta1
 kind: ServiceEntry
 metadata:
   name: opa-ext-authz-grpc-local
+  namespace: bank-account
 spec:
   hosts:
     - "opa-ext-authz-grpc.local"
   exportTo:
-    - "."
+    - "*"
   endpoints:
     - address: "127.0.0.1"
   ports:
