@@ -1,0 +1,17 @@
+{
+  "input": {
+    "attributes": {
+      "request": {
+        "http": {
+          "headers": {
+            "authorization": "Basic c3JvemFuZ2U6dG90bw==",
+            ":authority": "bank-customer-service:8080"
+          },
+          "host": "bank-customer-service:8080",
+          "method": "GET",
+          "path": "/customers/1"
+        }
+      }
+    }
+  }
+}
