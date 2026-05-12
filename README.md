@@ -25,21 +25,6 @@ kubectl apply -f kubernetes/4-expose-istio-tools.yml
 ```
 Note : Le fichier ```kubernetes/3-apply-istio-tools.yml``` provient de la distrib istio : istio-1.20.3/samples/addons
 
-- Maj du sampling rate
-```bash
-kubectl edit configmap istio -n istio-system
-```
-Ajout de la propriété
-```yaml
-mesh: |-
-    accessLogFile: /dev/stdout
-    defaultConfig:
-      discoveryAddress: istiod.istio-system.svc:15012
-      proxyMetadata: {}
-      tracing:
-        sampling: 100  # add this
-```
-
 - Mettre à jour le host :
 ```
 127.0.0.1 kiali.istio
